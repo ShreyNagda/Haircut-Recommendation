@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 from werkzeug.utils import secure_filename
 import os
-from backend.utils import allowed_file, detect_face, get_face_shape, recommend_hairstyle
+from utils import allowed_file, detect_face, get_face_shape, recommend_hairstyle
 
 router = APIRouter()
 
