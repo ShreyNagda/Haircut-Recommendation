@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import os
-from models import face_shape_model, hair_style_model, encoded_x_labels, encoded_y_labels
+from backend.models import face_shape_model, hair_style_model, encoded_x_labels, encoded_y_labels
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 UPLOAD_FOLDER = "uploads"
