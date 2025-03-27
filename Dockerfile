@@ -2,7 +2,7 @@
 FROM python:3.10
 
 # Set the working directory inside the container
-WORKDIR /app/backend
+WORKDIR /app
 
 # Copy the requirements file and install dependencies
 COPY backend/requirements.txt .
