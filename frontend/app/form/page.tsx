@@ -51,6 +51,9 @@ export default function Form() {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
+        if (e.target.name === "age" && e.target.value <= "0") {
+            return toast.error("Age should more than 1");
+        }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,6 +195,7 @@ export default function Form() {
                                 <option value="professional">
                                     Professional
                                 </option>
+                                <option value="others">Others</option>
                             </select>
                             <select
                                 name="hair_length"
