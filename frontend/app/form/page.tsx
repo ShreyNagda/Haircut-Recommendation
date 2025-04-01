@@ -167,7 +167,7 @@ export default function Form() {
                             <div className="w-full flex items-end justify-end">
                                 <button
                                     onClick={handleNext}
-                                    className="mt-4 bg-blue-400 text-white px-4 py-2 rounded"
+                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded"
                                 >
                                     Next
                                 </button>
@@ -217,7 +217,7 @@ export default function Form() {
                                 </button>
                                 <button
                                     onClick={handleNext}
-                                    className="bg-blue-400 text-white px-4 py-2 rounded"
+                                    className="bg-indigo-500 text-white px-4 py-2 rounded"
                                 >
                                     Next
                                 </button>
