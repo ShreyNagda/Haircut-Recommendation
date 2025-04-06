@@ -2,7 +2,8 @@ from fastapi import APIRouter, File, UploadFile, HTTPException, Form
 from fastapi.responses import JSONResponse
 from werkzeug.utils import secure_filename
 import os
-from utils import allowed_file, detect_face, get_face_shape, recommend_hairstyle
+from utils import allowed_file, detect_face,  recommend_hairstyle
+from face_shape import analyze_face_shape
 
 router = APIRouter()
 
@@ -28,12 +29,9 @@ async def detect_face_shape(file: UploadFile = File(...)):
     if not detect_face(file_path):
         raise HTTPException(status_code=400, detail="No face detected in the image")
 
-    face_shape = get_face_shape(file_path)
-
-    return JSONResponse(content={
-        "face_shape": face_shape,
-        "image_path": file_path
-    })
+    face_shape = analyze_face_shape(file_path)
+    print(face_shape)
+    return JSONResponse(content=face_shape)
 
 @router.post("/api/recommend-hairstyle")
 async def get_hairstyle_recommendation(
