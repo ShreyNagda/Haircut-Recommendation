@@ -19,9 +19,12 @@ const GenderSelection = ({
     return (
         <div className="mt-2">
             <div className="flex justify-center gap-3">
-                {["male", "female"].map((gender) => (
+                {["male", "female"].map((gender, index) => (
                     <label
+                        tabIndex={0}
                         key={gender}
+                        aria-checked="false"
+                        role="radio"
                         className={`cursor-pointer px-6 py-3 rounded-lg border text-center w-32
                             ${
                                 selectedGender === gender

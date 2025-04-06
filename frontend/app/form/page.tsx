@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { BeatLoader } from "react-spinners";
+import CameraCapture from "../components/CameraCapture";
 
 export default function Form() {
     const [loading, setLoading] = useState(false);
@@ -23,7 +24,6 @@ export default function Form() {
         selfie: null as File | null,
         face_shape: "",
     });
-    const router = useRouter();
 
     const handleNext = () => {
         if (step == 1) {
@@ -56,6 +56,11 @@ export default function Form() {
         }
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const handleCameraCapture = (file: File) => {
+        console.log(file);
+        setFormData({ ...formData, selfie: file });
+    };
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             setFormData({ ...formData, selfie: e.target.files[0] });
@@ -75,7 +80,7 @@ export default function Form() {
 
         try {
             const face_shape_response = await api.post(
-                "/api/detect-face",
+                "/detect-face",
                 formDataObj,
                 {
                     headers: {
@@ -84,7 +89,7 @@ export default function Form() {
                 }
             );
             const face_result = face_shape_response.data;
-            console.log(face_result);
+            setFormData({ ...formData, face_shape: face_result.face_shape });
             let age = "13-19";
             const _age = Number(formData["age"]);
             if (_age < 13) {
@@ -107,7 +112,7 @@ export default function Form() {
             formDataObj1.append("hair_length", formData["hair_length"]);
             formDataObj1.append("profession", formData["profession"]);
             const hairstyle_response = await api.post(
-                "/api/recommend-hairstyle",
+                "/recommend-hairstyle",
                 formDataObj1,
                 {
                     headers: {
@@ -123,7 +128,7 @@ export default function Form() {
         } catch (error) {
             setLoading(false);
             console.error("Upload failed", error);
-            toast.error("Upload failed. Please try again.");
+            toast.error("Upload failed! " + error);
         }
 
         // console.log("Final Form Data:", formData);
@@ -230,12 +235,41 @@ export default function Form() {
                             <h2 className="text-2xl font-bold">
                                 Step 3: Upload Selfie
                             </h2>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                                className="border p-2 mt-2 w-full rounded-sm"
-                            />
+                            {formData["selfie"] && (
+                                <div className="flex flex-col items-center">
+                                    <img
+                                        src={URL.createObjectURL(
+                                            formData["selfie"]!
+                                        )}
+                                        className="h-32 "
+                                    />
+                                    <p className="mt-2 text-gray-700">
+                                        {formData["selfie"]?.name}
+                                    </p>
+                                </div>
+                            )}
+                            <div className="flex flex-col items-center">
+                                {/* Hidden File Input */}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                    id="fileInput"
+                                />
+
+                                {/* Button to Open File Dialog */}
+                                <label
+                                    htmlFor="fileInput"
+                                    className="cursor-pointer border p-2 bg-indigo-500 text-white rounded"
+                                >
+                                    Choose a file
+                                </label>
+
+                                {/* File Name Display */}
+                            </div>
+                            <div className="flex justify-center pb-2">OR</div>
+                            <CameraCapture onCapture={handleCameraCapture} />
                             <div className="flex justify-between gap-2 mt-4">
                                 <button
                                     onClick={handleBack}
@@ -257,17 +291,33 @@ export default function Form() {
 
             {result && !loading && (
                 <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center justify-center gap-1">
+                        <img
+                            src={URL.createObjectURL(formData["selfie"]!)}
+                            className="w-32 rounded-xl"
+                        />
+                        <div className="text-2xl font-bold text-center">
+                            {formData["name"]}
+                        </div>
+                        <div className="text-lg md:text-xl">
+                            Face Shape: {formData["face_shape"]}
+                        </div>
+                    </div>
+
                     <h2 className="text-2xl font-bold text-center">
                         Recommended Hairstyles
                     </h2>
-                    <div className="flex flex-wrap gap-4 items-center justify-center p-4">
+                    <ul className="flex flex-col gap-4 p-4 list-disc">
                         {Array.isArray(result["recommended_hairstyle"]) &&
                             (result?.["recommended_hairstyle"] ?? []).map(
-                                (hr: any) => <div key={hr}>{hr}</div>
+                                (hr: any) => {
+                                    console.log(hr);
+                                    return <li key={hr}>{hr}</li>;
+                                }
                             )}
-                    </div>
+                    </ul>
                     <Link
-                        href={"/"}
+                        href={"/form"}
                         className="bg-blue-200 px-4 py-2 rounded-sm"
                     >
                         Back to Home

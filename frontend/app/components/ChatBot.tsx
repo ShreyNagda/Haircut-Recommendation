@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MessageSquare, X } from "lucide-react";
 
@@ -18,7 +18,6 @@ const Chatbot: React.FC = () => {
 
     // Instantiate the GoogleGenerativeAI model
     const apikey = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
-    console.log(apikey);
     if (!apikey) {
         console.error("API key undefined");
     }
@@ -87,7 +86,7 @@ const Chatbot: React.FC = () => {
 
             {/* Chatbot UI */}
             {isChatOpen && (
-                <div className=" md:max-w-lg bg-gray-900 text-white rounded-lg shadow-lg fixed bottom-20 right-0 w-80 z-40">
+                <div className=" md:max-w-lg bg-gray-900 text-white rounded-2xl shadow-lg fixed bottom-20 right-0 w-80 z-40">
                     <h1 className="text-lg bg-gray-800 py-2 px-1">
                         Hair Care Chatbot
                     </h1>
