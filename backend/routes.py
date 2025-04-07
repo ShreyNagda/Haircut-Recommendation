@@ -30,7 +30,7 @@ async def detect_face_shape(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="No face detected in the image")
 
     face_shape = analyze_face_shape(file_path)
-    print(face_shape)
+    # print(face_shape)
     return JSONResponse(content=face_shape)
 
 @router.post("/api/recommend-hairstyle")
